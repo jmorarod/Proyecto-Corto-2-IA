@@ -1,5 +1,61 @@
 import math
 
+def a_star_search(archivo, vision, zanahorias):
+    #try:
+    tablero = leer_tablero(archivo)
+    print(tablero)
+    #while(zanahorias > 0):
+    costos = calculo_costo(tablero, vision, zanahorias)
+    print(costos)
+    #except:
+       # print("Error al leer el archivo de entrada")
+
+def calculo_costo(tablero, rango, zanahorias_restantes):
+    conejo = posicion_conejo(tablero)
+    movimientos = movimientos_conejo(tablero, conejo)
+    vision_conejo = rango_vision_conejo(tablero, conejo, rango)
+    costos = []
+    for casilla_movimiento in movimientos:
+        costos_movimientos = []
+        
+        for casilla_vision in vision_conejo:
+            
+            casilla = tablero[casilla_vision[0]][casilla_vision[1]]
+            if(casilla == 'Z'):#Funcion de costo
+                #costo = distancia_entre_casillas([casilla_movimiento[1], casilla_movimiento[2]],casilla_vision)Esto es con distancia_euclideana
+                costo = abs(casilla_movimiento[1] - casilla_vision[0]) + abs(casilla_movimiento[2] - casilla_vision[1])
+                costo -= (zanahorias_restantes - cantidad_caracter_vecinos_por_casilla('Z', casilla_vision, tablero))
+                
+                if(tablero[casilla_movimiento[1]][casilla_movimiento[2]] == 'Z'):
+                    costo -= 1
+                costos_movimientos += [costo]
+        costo_minimo = float("inf")
+        indice_minimo = 0
+        indice = 0
+        for i in costos_movimientos:
+            if(i < costo_minimo):
+                costo_minimo = i
+                indice_minimo = indice
+            indice += 1
+        costos += [casilla_movimiento[0], costos_movimientos[indice_minimo]]
+    return costos
+            
+
+def movimientos_conejo(tablero, conejo):
+    movimientos = []
+    if(conejo[0] - 1 >= 0):
+        movimientos += [["IZQUIERDA",conejo[0] - 1, conejo[1]]]
+    if(conejo[0] + 1 < len(tablero[0])):
+        movimientos += [["DERECHA",conejo[0] + 1, conejo[1]]]
+    if(conejo[1] - 1 >= 0):
+        movimientos += [["ARRIBA",conejo[0], conejo[1] - 1]]
+    if(conejo[1] + 1 < len(tablero)):
+        movimientos += [["ABAJO",conejo[0], conejo[1] + 1]]
+    return movimientos
+    
+            
+                
+
 #Entrada: Dos listas 
 #Salida: Distancia euclideana entre casillas
 #Restricciones: Lista = [x, y]
@@ -35,15 +91,19 @@ def cantidad_caracter_vecinos_por_casilla(caracter, casilla, tablero):
             
 def leer_tablero(archivo):
     tablero = inicializar_tablero(archivo)
+    archivo = open(archivo,'r')
     if(tablero == []):
         return []
     i = 0
     j = 0
     for line in archivo:
+        j = 0
         for char in line:
-            tablero[i][j] = char
+            if(validar_caracter(char)):
+                tablero[i][j] = char
             j += 1
         i += 1
+    archivo.close()
     return tablero
 
 #Entrada: Direccion de un archivo
@@ -60,13 +120,13 @@ def inicializar_tablero(archivo):
     columnas = 0
     for line in archivo:
         filas += 1
+        columnas = 0
         for char in line:
-            if(validar_caracter(char)):
-                if(char != '\n'):
-                    columnas += 1
-            else:
-                return []
-    tablero = [[0] * columnas] * filas
+                columnas += 1
+        
+            
+    tablero = [[0 for i in range(columnas)] for j in range(filas)]
+    print(tablero)
     return tablero
     
 
@@ -77,8 +137,8 @@ def inicializar_tablero(archivo):
 #Descripción: Retorna la posición del conejo en el tablero
 
 def posicion_conejo(tablero):
-    for i in tablero:
-        for j in tablero:
+    for i in range(0, len(tablero)):
+        for j in range(0, len(tablero[0])):
             if(tablero[i][j] == 'C'):
                 return [i, j]
             
@@ -89,16 +149,16 @@ def posicion_conejo(tablero):
 #Descripción: Retorna una matriz con las casillas visibles
 #             por el conejo en el tablero
 
-def rango_vision_conejo(posicion, rango):
+def rango_vision_conejo(tablero, posicion, rango):
     vision = []
     x_conejo = posicion[0]
     y_conejo = posicion[1]
-    x_rango = rango[0]
-    y_rango = rango[1]
-    for i in range(x_conejo - x_rango, x_conejo + x_rango)
-        for j in range(y_conejo - y_rango, y_conejo + y_rango):
+    for i in range(x_conejo - rango, x_conejo + rango):
+        for j in range(y_conejo - rango, y_conejo + rango):
             if(i >= 0 and i < len(tablero) and j >= 0 and j < len(tablero[0])):
-                vision +0 [i,j]
+                if(i != x_conejo and j != y_conejo):
+                    vision += [[i,j]]
+
     return vision
             
 #Entrada: Caracter
