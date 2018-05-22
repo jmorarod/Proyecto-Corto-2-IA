@@ -1,26 +1,77 @@
 import math
-#Funcion principal, comentar
+import numpy as np
+import os
+import shutil
+
+#Entrada: Archivo con el tablero inicial, rango de vision
+#         zanahorias que el conejo va a buscar
+#Salida: Imprime cada paso del algoritmo en un archivo txt
+#Restricciones: Revisar restriciones de formato del tablero
+#               en la documentación, el rango y las zanahorias
+#               son números enteros
+#Descripción: Dado un escenario del problema del conejo
+#             realiza una búsqueda a* para cada una de
+#             las zanahorias hasta que no las haya en el
+#             tablero o bien haya encontrado la cantidad
+#             indicada por parámetro
+
 def a_star_search(archivo, vision, zanahorias):
     tablero = leer_tablero(archivo)
     if(tablero == []):
         return
-    i = 0
-    #Implementar función revisar cantidad de zanahorias
-    while(zanahorias > 0):#or zanahorias en tablero = 0
-        #print_tablero(tablero)
+    i = 1
+    while(zanahorias > 0 and zanahorias_restantes(tablero) > 0):
+        print_tablero(tablero,"salida_A_Estrella\\" + str(i).zfill(5) + ".txt")
         costos = calculo_costo(tablero, vision, zanahorias)
         movimiento = menor_costo(costos)
         print("Paso: ",str(i).zfill(5))
         tablero, zanahorias = mover_conejo(movimiento, tablero, zanahorias)
         i += 1
     print("Paso: ",str(i).zfill(5), "FINAL")
-    #print_tablero(tablero)
+    print_tablero(tablero, "salida_A_Estrella\\" + str(i).zfill(5) + ".txt")
 
-#modificar función para imprimir a txt   
-def print_tablero(tablero):
+#Entrada: Matriz y string
+#Salida: 
+#Restricciones: 
+#Descripción: Escribe en un txt la matriz "tablero"
+    
+def zanahorias_restantes(tablero):
+    cantidad = 0
     for i in tablero:
-        print(i)
-#comentar
+        for j in i:
+            if(j == 'Z'):
+                cantidad += 1
+    return cantidad
+
+#Entrada: Matriz y string
+#Salida: 
+#Restricciones: 
+#Descripción: Escribe en un txt la matriz "tablero"
+    
+def print_tablero(tablero, nombre_archivo):
+    try:
+        string = ""
+        file = open(nombre_archivo,'w+')
+        for i in tablero:
+            for j in i:
+                string += j
+        file.write(string)
+        file.close()
+    except:
+        pass
+
+#Entrada: Tablero del problema del conejo(Matriz NxM),
+#         Rango de visión del conejo(entero),
+#         Cantidad de zanahorias restantes
+#Salida: Costos por cada posible movimiento, ejemplo:
+#       [["DERECHA",10], ["IZQUIERDA",1000]]
+#Restricciones: Revisar restriciones de formato del tablero
+#               en la documentación, rango y zanahorias_restantes
+#               son enteros
+#Descripción: Cálcula el costo de cada movimiento dado por la función
+#             de predicción de costo futuro:
+#             ********FUNCION DE COSTO************
+
 def calculo_costo(tablero, rango, zanahorias_restantes):
     conejo = posicion_conejo(tablero)
     movimientos = movimientos_conejo(tablero, conejo)
@@ -31,13 +82,14 @@ def calculo_costo(tablero, rango, zanahorias_restantes):
         for casilla_vision in vision_conejo:
             
             casilla = tablero[casilla_vision[0]][casilla_vision[1]]
-            if(casilla == 'Z'):#Funcion de costo
-                #costo = distancia_entre_casillas([casilla_movimiento[1], casilla_movimiento[2]],casilla_vision)Esto es con distancia_euclideana
+            #Función de costo###
+            if(casilla == 'Z'):
                 costo = abs(casilla_movimiento[1] - casilla_vision[0]) + abs(casilla_movimiento[2] - casilla_vision[1])
                 costo -= (zanahorias_restantes - cantidad_caracter_vecinos_por_casilla('Z', casilla_vision, tablero))
                 
                 if(tablero[casilla_movimiento[1]][casilla_movimiento[2]] == 'Z'):
                     costo -= 1
+            ####################
                 costos_movimientos += [costo]
         costo_minimo = float("inf")
         indice_minimo = 0
@@ -52,7 +104,16 @@ def calculo_costo(tablero, rango, zanahorias_restantes):
         except:
             costos += [[casilla_movimiento[0], 1000]]           
     return costos
-#Comentar
+
+#Entrada: Movimiento a realizar(["Direccion",x, y]),
+#         Tablero del problema del conejo(Matriz NxM),
+#         Cantidad de zanahorias restantes
+#Salida: Matriz con el tablero actual luego del movimiento,
+#        Cantidad de zanahorias restantes
+#Restricciones: Revisar restriciones de formato del tablero
+#               en la documentación
+#Descripción: Realiza el movimiento del conejo en el tablero 
+
 def mover_conejo(movimiento, tablero, zanahorias):
     conejo = posicion_conejo(tablero)
     x_conejo = conejo[0]
@@ -76,7 +137,13 @@ def mover_conejo(movimiento, tablero, zanahorias):
         tablero[x_conejo + 1][y_conejo] = 'C'
     return tablero, zanahorias
         
-#Comentar
+                
+#Entrada: Lista
+#Salida: Entero
+#Restricciones: La lista tiene el formato
+#               [["Direccion",costo], ["Direccion",costo]...]
+#Descripción: La dirección con menor costo
+
 def menor_costo(costos):
     menor = float("inf")
     min_costo = []
@@ -85,7 +152,17 @@ def menor_costo(costos):
             menor = costo[1]
             min_costo = costo
     return min_costo
-#Comentar
+                
+#Entrada: Tablero del problema del conejo(Matriz NxM),
+#         Posición [x, y] del conejo
+#Salida: Matriz con los posibles movimientos del conejo
+#        Cada movimiento es ["Direccion",x, y]
+#Restricciones: Revisar restriciones de formato del tablero
+#               en la documentación
+#Descripción: Retorna una matriz con las direcciones
+#             en las que se puede mover el conejo
+#             dada su posición actual
+
 def movimientos_conejo(tablero, conejo):
     movimientos = []
     if(conejo[1] - 1 >= 0):
@@ -100,6 +177,36 @@ def movimientos_conejo(tablero, conejo):
     
             
                 
+#Entrada: Tablero del problema del conejo(Matriz NxM)
+#Salida: Posicion del conejo en el tablero
+#Restricciones: Revisar restriciones de formato del tablero
+#               en la documentación
+#Descripción: Retorna la posición del conejo en el tablero
+
+def posicion_conejo(tablero):
+    for i in range(0, len(tablero)):
+        for j in range(0, len(tablero[0])):
+            if(tablero[i][j] == 'C'):
+                return [i, j]
+            
+#Entradas: Posicion del conejo(Lista = [x, y])
+#          Rango de vision(Lista = [x, y]) 
+#Salida: Vision del conejo(Matriz [[x1,y1]...[xn, yn]])
+#Restricciones:
+#Descripción: Retorna una matriz con las casillas visibles
+#             por el conejo en el tablero
+
+def rango_vision_conejo(tablero, posicion, rango):
+    vision = []
+    x_conejo = posicion[0]
+    y_conejo = posicion[1]
+    for i in range(x_conejo - rango, x_conejo + rango):
+        for j in range(y_conejo - rango, y_conejo + rango):
+            if(i >= 0 and i < len(tablero) and j >= 0 and j < len(tablero[0]) - 1):
+                if(i != x_conejo or j != y_conejo):
+                    vision += [[i,j]]
+
+    return vision
 
 #Entrada: Dos listas 
 #Salida: Distancia euclideana entre casillas
@@ -175,36 +282,6 @@ def inicializar_tablero(archivo):
     return tablero
     
 
-#Entrada: Tablero del problema del conejo(Matriz NxM)
-#Salida: Posicion del conejo en el tablero
-#Restricciones: Revisar restriciones de formato del tablero
-#               en la documentación
-#Descripción: Retorna la posición del conejo en el tablero
-
-def posicion_conejo(tablero):
-    for i in range(0, len(tablero)):
-        for j in range(0, len(tablero[0])):
-            if(tablero[i][j] == 'C'):
-                return [i, j]
-            
-#Entradas: Posicion del conejo(Lista = [x, y])
-#          Rango de vision(Lista = [x, y]) 
-#Salida: Vision del conejo(Matriz [[x1,y1]...[xn, yn]])
-#Restricciones:
-#Descripción: Retorna una matriz con las casillas visibles
-#             por el conejo en el tablero
-
-def rango_vision_conejo(tablero, posicion, rango):
-    vision = []
-    x_conejo = posicion[0]
-    y_conejo = posicion[1]
-    for i in range(x_conejo - rango, x_conejo + rango):
-        for j in range(y_conejo - rango, y_conejo + rango):
-            if(i >= 0 and i < len(tablero) and j >= 0 and j < len(tablero[0]) - 1):
-                if(i != x_conejo or j != y_conejo):
-                    vision += [[i,j]]
-
-    return vision
             
 #Entrada: Caracter
 #Salida: True o False
