@@ -15,7 +15,7 @@ m_bucle = [['C', '>', 'V', ' '],
 archivo = 'C:/Users/Karina/Documents/GitHub/Proyecto-Corto-2-IA/tablero1.txt'
 # fitness(m,'derecha')
 # algortimo_genetico("",'>',4,10)
-# algortimo_genetico("",'derecha',4,10,20,30,15,1)
+# algortimo_genetico(archivo,'derecha',4,10,20,30,15,1)
 
 import random
 import copy
@@ -28,11 +28,11 @@ mejor = []
 
 def algortimo_genetico(tablero_inicial, direccion, cant_individuos, generaciones,
                        magregar, mcambiar, mquitar, tipo_cruce):
-    #matriz_tablero = matriz_prueba
+
     mutacion_agregar_signal = magregar
     mutacion_cambiar_direccion = mcambiar
     mutacion_quitar_signal = mquitar
-    tablero = leer_tablero(archivo)
+    tablero = leer_tablero(tablero_inicial)
 
     matriz_tablero = []
 
