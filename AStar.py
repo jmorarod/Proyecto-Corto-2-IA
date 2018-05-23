@@ -1,7 +1,7 @@
 import math
 import numpy as np
-import os
-import shutil
+from random import uniform
+
 
 #Entrada: Archivo con el tablero inicial, rango de vision
 #         zanahorias que el conejo va a buscar
@@ -23,6 +23,7 @@ def a_star_search(archivo, vision, zanahorias):
     while(zanahorias > 0 and zanahorias_restantes(tablero) > 0):
         print_tablero(tablero,"salida_A_Estrella\\" + str(i).zfill(5) + ".txt")
         costos = calculo_costo(tablero, vision, zanahorias)
+        print(costos)
         movimiento = menor_costo(costos)
         print("Paso: ",str(i).zfill(5))
         tablero, zanahorias = mover_conejo(movimiento, tablero, zanahorias)
@@ -80,13 +81,11 @@ def calculo_costo(tablero, rango, zanahorias_restantes):
     for casilla_movimiento in movimientos:
         costos_movimientos = []
         for casilla_vision in vision_conejo:
-            
             casilla = tablero[casilla_vision[0]][casilla_vision[1]]
             #Función de costo###
             if(casilla == 'Z'):
                 costo = abs(casilla_movimiento[1] - casilla_vision[0]) + abs(casilla_movimiento[2] - casilla_vision[1])
                 costo -= (zanahorias_restantes - cantidad_caracter_vecinos_por_casilla('Z', casilla_vision, tablero))
-                
                 if(tablero[casilla_movimiento[1]][casilla_movimiento[2]] == 'Z'):
                     costo -= 1
             ####################
@@ -147,11 +146,36 @@ def mover_conejo(movimiento, tablero, zanahorias):
 def menor_costo(costos):
     menor = float("inf")
     min_costo = []
+    lista_min_costos = []
     for costo in costos:
-        if(costo[1] < menor):
+        if(costo[1] == menor):
+            lista_min_costos += [costo]
+        elif(costo[1] < menor):
+            lista_min_costos = []
             menor = costo[1]
             min_costo = costo
-    return min_costo
+    if(lista_min_costos == []):
+        return min_costo
+    else:
+        
+        lista_min_costos += [min_costo]
+        return direccion_aleatoria(lista_min_costos)
+
+def direccion_aleatoria(lista_min_costo):
+    direcciones = len(lista_min_costo)
+    probabilidad = 1 / direcciones
+    probabilidades = probabilidades_acumuladas(probabilidad, len(lista_min_costo))
+    sample_num = uniform(0, 1)
+    for i in range(0, len(probabilidades)):
+        if (sample_num <= probabilidades[i]):
+            return lista_min_costo[i]
+    
+
+def probabilidades_acumuladas(probabilidad, cantidad):
+    probabilidades = []
+    for i in range(0, cantidad):
+        probabilidades += [probabilidad * (i + 1)]
+    return probabilidades
                 
 #Entrada: Tablero del problema del conejo(Matriz NxM),
 #         Posición [x, y] del conejo
