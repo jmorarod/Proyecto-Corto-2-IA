@@ -23,14 +23,25 @@ def a_star_search(archivo, vision, zanahorias):
     while(zanahorias > 0 and zanahorias_restantes(tablero) > 0):
         print_tablero(tablero,"salida_A_Estrella\\" + str(i).zfill(5) + ".txt")
         costos = calculo_costo(tablero, vision, zanahorias)
-        print(costos)
         movimiento = menor_costo(costos)
-        print("Paso: ",str(i).zfill(5))
+        print_paso(i, costos, movimiento, False)
         tablero, zanahorias = mover_conejo(movimiento, tablero, zanahorias)
         i += 1
-    print("Paso: ",str(i).zfill(5), "FINAL")
+    print_paso(i,"","",True)
     print_tablero(tablero, "salida_A_Estrella\\" + str(i).zfill(5) + ".txt")
 
+def print_paso(paso, costos, movimiento, final):
+    paso = str(paso)
+    if(not final):
+        print("Paso: ",paso.zfill(5),obtener_costos_string(costos), "Movimiento: ", movimiento[0])
+    else:
+        print("Paso: ",paso.zfill(5), "FINAL")
+        
+def obtener_costos_string(costos):
+    string = ""
+    for costo in costos:
+        string += costo[0] +": "+str(costo[1])+" "
+    return string
 #Entrada: Matriz y string
 #Salida: 
 #Restricciones: 
