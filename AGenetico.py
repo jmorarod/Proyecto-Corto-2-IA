@@ -1,22 +1,3 @@
-
-matriz_prueba = [['C', ' ', ' ', ' ', ' ', ' ', ' '],
-                 [' ', ' ', 'Z', ' ', ' ', ' ', ' '],
-                 [' ', ' ', ' ', 'Z', ' ', ' ', ' '],
-                 [' ', ' ', ' ', ' ', ' ', 'Z', ' ']]
-
-m = [['C', ' ', 'V', ' '],
-     [' ', ' ', 'Z', ' '],
-     [' ', ' ', '>', 'Z']]
-
-m_bucle = [['C', '>', 'V', ' '],
-           [' ', ' ', 'Z', ' '],
-           [' ', 'A', '<', 'Z']]
-
-archivo = 'C:/Users/Karina/Documents/GitHub/Proyecto-Corto-2-IA/tablero1.txt'
-# fitness(m,'derecha')
-# algortimo_genetico("",'>',4,10)
-# algortimo_genetico(archivo,'derecha',4,10,20,30,15,1)
-
 import random
 import copy
 import time
@@ -24,6 +5,20 @@ import os
 import shutil
 
 mejor = []
+
+# Entrada: tablero inicial direccion en la cual se encuentra un archivo .txt
+#          direccion inicial del conejo (string), cant_individuos (int),
+#          generaciones (int) cantidad de generaciones, magregar valor de
+#          mutacion para agregar señales (int), mcambiar(int), mquitar(int),
+#          tipo_cruce(int) 0 indica que es por columnas y 1 si es por filas
+# Salida: None, se generan un estructura de salida que se especifica en la
+#         definición del problema (revisar documentación)
+# Restricciones: Que se cumplan los tipos de la entrada, y  que los valores de
+#               magregar, mcambiar, mquitar sumados sean menor a 100
+# Descripción: Funcion general del algortimo genetico, aqui se unen todas
+#              las demas partes. Evalua un tablero inicial y trata de encontrar
+#              el camino optimo que el conejo debe seguir para que pueda
+#              comer todas las zanahorias
 
 
 def algortimo_genetico(tablero_inicial, direccion, cant_individuos, generaciones,
@@ -47,7 +42,7 @@ def algortimo_genetico(tablero_inicial, direccion, cant_individuos, generaciones
         x -= 1
 
     cant = 1
-    
+
     try:
         ruta = "salida_genetico/"+direccion
         shutil.rmtree(ruta)
@@ -56,7 +51,7 @@ def algortimo_genetico(tablero_inicial, direccion, cant_individuos, generaciones
 
     global mejor
     mejor = []
-    
+
     while(cant <= generaciones):
         print("\n")
         print("GENERACION: "+str(cant).zfill(5))
@@ -85,8 +80,18 @@ def algortimo_genetico(tablero_inicial, direccion, cant_individuos, generaciones
         cant += 1
 
     print("\n")
-    print("El mejor individuo es: INDIVIDUO " + str(mejor[0]).zfill(5) + " GENERACION " + str(mejor[1]).zfill(5))
+    print("El mejor individuo es: INDIVIDUO " +
+          str(mejor[0]).zfill(5) + " GENERACION " + str(mejor[1]).zfill(5))
     print("\n")
+
+# Entrada: gen es la matriz con el tablero, cantidad es el numero de Individuos
+#          por generacion, direccion en la que se mueve el conejo(string),
+#          generacion es el numero de la generacoin actual
+# Salida: Arreglo con individuos
+# Restricciones: Que se cumplan los tipos de la entrada, cantidad tiene que
+#                menor o igual a la cantidad de individuos
+# Descripción: Dado una generacion, con padres e hijos, selecciona a los mejores
+#              quienes tengan un fitness mas alto
 
 
 def elegir_mejores(gen, cantidad, direccion, generacion):
@@ -104,17 +109,25 @@ def elegir_mejores(gen, cantidad, direccion, generacion):
 
     for i in gen:
         if mejor == []:
-          mejor.extend([n,generacion,i[-1]])
+            mejor.extend([n, generacion, i[-1]])
         elif mejor[2] < i[-1]:
-          mejor = []
-          mejor.extend([n,generacion,i[-1]])
-          
+            mejor = []
+            mejor.extend([n, generacion, i[-1]])
+
         print("INDIVIDUO " + str(n).zfill(5) + " APTITUD: " + str(i[-1]))
         i = i[:-1]
         next_gen.append(i)
         n += 1
 
     return next_gen
+
+# Entrada: individuo1 y individuo2 son la matrices con un tablero, tipo indica
+#          el tipo de cruce 0 indica que es por columnas y 1 si es por filas
+# Salida: Devuelve arreglo con dos matrices que son el resultado del cruce
+#         de los indiviuos
+# Restricciones: Que se cumplan los tipos de la entrada
+# Descripción: Apartir de dos individuos (padres) se generan otros dos indiviuos
+#              que son los hijos
 
 
 def cruce(individuo1, individuo2, tipo):
@@ -147,6 +160,15 @@ def cruce(individuo1, individuo2, tipo):
         h.append(h2)
 
         return h
+
+# Entrada: individuo es la matriz con el tablero, valor de mutacion para agregar
+#          una señal (int), cambiar (int), quitar (int)
+# Salida: Matriz con indiviuo mutado
+# Restricciones: Que se cumplan los tipos de la entrada, y que los valores de
+#               m_agregar, m_cambiar, m_quitar sumados sean menor a 100
+# Descripción: Dado un indiviuo (tablero), se toma un valor aleatoria
+#              y segun ese valor se altera el tablero agregando, cambiando o
+#              eliminando una señal
 
 
 def mutacion(individuo, m_agregar, m_cambiar, m_quitar):
@@ -199,6 +221,14 @@ def mutacion(individuo, m_agregar, m_cambiar, m_quitar):
 
     return individuo
 
+# Entrada: individuo es la matriz con el tablero, direecion en la que se mueve
+#           el conejo(string),
+# Salida: Devuelve un entero que indica la puntuacion del inidividuo
+# Restricciones: Que se cumplan los tipos de la entrada
+# Descripción: Dado un individuo (tablero), determina la puntuacion tomando
+#              en cuenta los pasos dados, señales colocadas y cantidad de
+#              zanahorias recogidas
+
 
 def fitness(individuo, direccion):
     total_zanahorias = 0
@@ -238,6 +268,14 @@ def fitness(individuo, direccion):
 
     return fitness
 
+# Entrada: individuo es la matriz con el tablero, posicion actual del
+#          conejo(arreglo), direecion en la que se mueve el conejo(string),
+#          total de zanahorias(int),numero de la recursion actual(int)
+# Salida: Arreglo con cantidad de pasos dados y cantidad de zanahorias recogidas
+# Restricciones: Que se cumplan los tipos de la entrada
+# Descripción: Simula como recorreria el conejo un tablero dado, segun los
+#              simbolos y la direccion inicial del conejo
+
 
 def recorrer_tablero(individuo, pos_conejo, direccion, total_zanahoria, num):
     cant_pasos = 0
@@ -246,7 +284,7 @@ def recorrer_tablero(individuo, pos_conejo, direccion, total_zanahoria, num):
     if total_zanahoria == 0:
         return [0, 0]
 
-    if num >= 10:
+    if num >= 100:
         return [150, cant_zanahorias]
 
     if direccion == 'derecha' or direccion == '>':
@@ -404,6 +442,13 @@ def validar_caracter(char):
     else:
         return False
 
+# Entrada: Direccion (String), generacion (int), Individuos arreglo con todos
+#          individuos de la generacion
+# Salida: None
+# Restricciones: Que se cumplan los tipos de la entrada
+# Descripción: Crea la estructura de salida que se especifica en la definición
+#               del problema (revisar documentación)
+
 
 def print_tablero_genetico(direccion, generacion, indiviuos):
     ruta = "salida_genetico/"+direccion+"/"+str(generacion).zfill(5)
@@ -424,7 +469,6 @@ def print_tablero_genetico(direccion, generacion, indiviuos):
                 string += "\n"
             file.write(string)
             file.close()
-            n+=1
+            n += 1
     except:
         pass
-    
