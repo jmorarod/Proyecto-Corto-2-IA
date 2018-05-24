@@ -1,8 +1,0 @@
-<<<<<<< HEAD:tec/ic/ia/pc2/salida_A_Estrella/00003.txt
-C   
-  Z 
-=======
-    
- CZ 
->>>>>>> 319e944b5c70e2ba4b8c611ee0e085d95b371f20:salida_A_Estrella/00003.txt
-   Z
