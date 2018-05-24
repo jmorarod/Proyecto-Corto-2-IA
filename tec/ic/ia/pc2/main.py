@@ -1,5 +1,5 @@
 import sys
-from g05 import a_star_search, algortimo_genetico
+from tec.ic.ia.pc2.g05 import a_star_search, algortimo_genetico
 
 
 def main(argv):
