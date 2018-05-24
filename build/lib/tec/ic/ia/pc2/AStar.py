@@ -27,7 +27,7 @@ def a_star_search(archivo, vision, zanahorias):
         print_paso(i, costos, movimiento, False)
         tablero, zanahorias = mover_conejo(movimiento, tablero, zanahorias)
         i += 1
-    print_paso(i,"","",True)
+    print("Paso: ",str(i).zfill(5), "FINAL")
     print_tablero(tablero, "salida_A_Estrella\\" + str(i).zfill(5) + ".txt")
 
 def print_paso(paso, costos, movimiento, final):
@@ -42,6 +42,7 @@ def obtener_costos_string(costos):
     for costo in costos:
         string += costo[0] +": "+str(costo[1])+" "
     return string
+
 #Entrada: Matriz y string
 #Salida: 
 #Restricciones: 

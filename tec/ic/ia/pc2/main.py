@@ -20,13 +20,13 @@ def main(argv):
     bandera_generaciones = ""
     cantidad_generaciones = 0
     bandera_mutacion_agregar = ""
-    valor_mutacion_agregar = 0
+    valor_mutacion_agregar = 20
     bandera_mutacion_cambiar = ""
-    valor_mutacion_cambiar = 0
+    valor_mutacion_cambiar = 30
     bandera_mutacion_quitar = ""
-    valor_mutacion_quitar = 0
+    valor_mutacion_quitar = 15
     bandera_tipo_cruce = ""
-    valor_tipo_cruce = 0
+    valor_tipo_cruce = 1
     
     
     if largo_parametros < 7:
@@ -61,13 +61,10 @@ def main(argv):
                                 return 0
                             else:
                                 cantidad_zanahorias = int(argv[6])
-                                print(archivo_txt)
-                                print(cantidad_vision)
-                                print(cantidad_zanahorias)
                                 a_star_search(archivo_txt, cantidad_vision, cantidad_zanahorias)
                 elif bandera_tipo_algoritmo == "--genetico":
-                    if largo_parametros != 16:
-                        print("Para el algoritmo genético se deben pasar 16 parámetros")
+                    if largo_parametros < 8:
+                        print("Para el algoritmo genético se deben pasar al menos 8 parámetros")
                         return 0
                     else:
                     
@@ -89,49 +86,59 @@ def main(argv):
                                     return 0
                                 else:
                                     cantidad_generaciones = int(argv[7])
-                                    bandera_mutacion_agregar = argv[8]
-                                    if bandera_mutacion_agregar != "--mutacion-agregar":
-                                        print("Error de bandera mutación agregar, se esperaba '--mutacion-agregar', pero se digitó: "+bandera_mutacion_agregar)
-                                        return 0
+                                    if largo_parametros == 8:
+                                            algortimo_genetico(archivo_txt, valor_direccion, cantidad_individuos, cantidad_generaciones, valor_mutacion_agregar, valor_mutacion_cambiar, valor_mutacion_quitar, valor_tipo_cruce)
+                                            return 0
                                     else:
-                                        valor_mutacion_agregar = float(argv[9])
-                                        bandera_mutacion_cambiar = argv[10]
-                                        if bandera_mutacion_cambiar != "--mutacion-cambiar":
-                                            print("Error de bandera mutación cambiar, se esperaba '--mutacion-cambiar', pero se digitó: "+bandera_mutacion_cambiar)
+                                        
+                                        bandera_mutacion_agregar = argv[8]
+                                        if bandera_mutacion_agregar != "--mutacion-agregar":
+                                            print("Error de bandera mutación agregar, se esperaba '--mutacion-agregar', pero se digitó: "+bandera_mutacion_agregar)
                                             return 0
                                         else:
-                                            valor_mutacion_cambiar = float(argv[11])
-                                            bandera_mutacion_quitar = argv[12]
-                                            if bandera_mutacion_quitar != "--mutacion-quitar":
-                                                print("Error de bandera mutación quitar, se esperaba '--mutacion-quitar', pero se digitó: "+bandera_mutacion_quitar)
+                                            valor_mutacion_agregar = float(argv[9])
+                                            if largo_parametros == 10:
+                                                algortimo_genetico(archivo_txt, valor_direccion, cantidad_individuos, cantidad_generaciones, valor_mutacion_agregar, valor_mutacion_cambiar, valor_mutacion_quitar, valor_tipo_cruce)
                                                 return 0
-                                            else:
-                                                valor_mutacion_quitar = float(argv[13])
-                                                suma_porcentajes = valor_mutacion_agregar + valor_mutacion_cambiar + valor_mutacion_quitar
-                                                if suma_porcentajes > 100:
-                                                    print("La suma de los valores de mutación debe ser menor o igual a 100")
+
+                                            else:    
+                                                bandera_mutacion_cambiar = argv[10]
+                                                if bandera_mutacion_cambiar != "--mutacion-cambiar":
+                                                    print("Error de bandera mutación cambiar, se esperaba '--mutacion-cambiar', pero se digitó: "+bandera_mutacion_cambiar)
                                                     return 0
                                                 else:
-                                                    bandera_tipo_cruce = argv[14]
-                                                    if bandera_tipo_cruce != "--tipo-cruce":
-                                                        print("Error bandera tipo cruce, se esperaba '--tipo-cruce', pero se digitó: "+ bandera_tipo_cruce)
+                                                    valor_mutacion_cambiar = float(argv[11])
+                                                    if largo_parametros == 12:
+                                                        algortimo_genetico(archivo_txt, valor_direccion, cantidad_individuos, cantidad_generaciones, valor_mutacion_agregar, valor_mutacion_cambiar, valor_mutacion_quitar, valor_tipo_cruce)
                                                         return 0
                                                     else:
-                                                        valor_tipo_cruce = int(argv[15])
-                                                        if valor_tipo_cruce != 0 and valor_tipo_cruce != 1:
-                                                            print("El valor del tipo de cruce debe ser 0 o 1")
+                                                        bandera_mutacion_quitar = argv[12]
+                                                        if bandera_mutacion_quitar != "--mutacion-quitar":
+                                                            print("Error de bandera mutación quitar, se esperaba '--mutacion-quitar', pero se digitó: "+bandera_mutacion_quitar)
                                                             return 0
                                                         else:
-                                                            print(archivo_txt)
-                                                            print(valor_direccion)
-                                                            print(cantidad_individuos)
-                                                            print(cantidad_generaciones)
-                                                            print(valor_mutacion_agregar)
-                                                            print(valor_mutacion_cambiar)
-                                                            print(valor_mutacion_quitar)
-                                                            print(valor_tipo_cruce)
-                                                            algortimo_genetico(archivo_txt, valor_direccion, cantidad_individuos, cantidad_generaciones, valor_mutacion_agregar, valor_mutacion_cambiar, valor_mutacion_quitar, valor_tipo_cruce)
-                                        
+                                                            valor_mutacion_quitar = float(argv[13])
+                                                            suma_porcentajes = valor_mutacion_agregar + valor_mutacion_cambiar + valor_mutacion_quitar
+                                                            if suma_porcentajes > 100:
+                                                                print("La suma de los valores de mutación debe ser menor o igual a 100")
+                                                                return 0
+                                                            else:
+                                                                if largo_parametros == 14:
+                                                                    algortimo_genetico(archivo_txt, valor_direccion, cantidad_individuos, cantidad_generaciones, valor_mutacion_agregar, valor_mutacion_cambiar, valor_mutacion_quitar, valor_tipo_cruce)
+                                                                    return 0
+                                                                else:                                        
+                                                                    bandera_tipo_cruce = argv[14]
+                                                                    if bandera_tipo_cruce != "--tipo-cruce":
+                                                                        print("Error bandera tipo cruce, se esperaba '--tipo-cruce', pero se digitó: "+ bandera_tipo_cruce)
+                                                                        return 0
+                                                                    else:
+                                                                        valor_tipo_cruce = int(argv[15])
+                                                                        if valor_tipo_cruce != 0 and valor_tipo_cruce != 1:
+                                                                            print("El valor del tipo de cruce debe ser 0 o 1")
+                                                                            return 0
+                                                                        else:
+                                                                            algortimo_genetico(archivo_txt, valor_direccion, cantidad_individuos, cantidad_generaciones, valor_mutacion_agregar, valor_mutacion_cambiar, valor_mutacion_quitar, valor_tipo_cruce)
+                                                        
 
                                     
 
