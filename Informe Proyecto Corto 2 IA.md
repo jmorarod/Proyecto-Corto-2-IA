@@ -216,7 +216,7 @@ A continuación se detallan los resultados obtenidos
 
 ### Conlusiones de los resultados
 
-Con el tablero mas grande los resultados no fueron demasiado favorables, esto se debe a la cantidad de generaciones con el que se hicieron pruebas. Conforme se hicieron las pruebas se noto que el valor del fitness de los individuos se mantenia constante y no cambiante, esto se debe a los valores que se utilizaron para la mutacion.
+Con el tablero mas grande los resultados no fueron demasiado favorables, esto se debe a la cantidad de generaciones con el que se hicieron pruebas. Conforme se hicieron las pruebas se noto que el valor del fitness de los individuos se mantenia constante y no cambiante, esto se debe a los valores que se utilizaron para la mutacion. El valor de mutacion que mejor funcionan con tableros grandes y pocas generaciones, es utilizar un valor grande para el valor de agregar una nueva señal. Lo anterior hace que se mejore el fitness sin embargo nunca se llego a encontrar el optimo, para encontrar el optimo es necesario que se evaluen mas generaciones. 
 
 Ademas se observo que el tablero mas pequeño si se logro encontrar el optimo (donde el fitness es 277). Sin embargo se noto que usualmente despues de cierta cantidad de generaciones la puntuacion del fitness comenzaba a bajar considerablemente. 
 
