@@ -232,3 +232,5 @@ Con respecto a los tipos de cruce, el mejor es el que se hace por columna, debid
  
 * Se debe tomar en cuenta que ejemplo1.txt es un archivo de entrada que se encontrará en la misma carpeta que el archivo main.py, de otra forma, el programa no reconocerá el archivo y no se ejecutará.
 
+* También se debe tomar en cuenta que el algoritmo genético tiene cuatro parámetros opcionales: --mutacion-agregar, --mutacion-cambiar --mutacion-quitar y --tipo-cruce, es decir, si no se ponen estos parámetros, el programa se ejecutará de igual forma. Los parámetros anteriores a estos son obligatorios. 
+
