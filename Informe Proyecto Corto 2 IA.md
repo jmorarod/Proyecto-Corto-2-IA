@@ -220,7 +220,7 @@ Con el tablero mas grande los resultados no fueron demasiado favorables, esto se
 
 Ademas se observo que el tablero mas pequeño si se logro encontrar el optimo (donde el fitness es 277). Sin embargo se noto que usualmente despues de cierta cantidad de generaciones la puntuacion del fitness comenzaba a bajar considerablemente. 
 
-Con respecto a los tipos de cruce, el mejor es el que se hace por columna debido a que da resultados mas constantes ademas que el caso del tablero mas pequeño se visualizo que con el cruce por columna fue el unico capaz de encontrar el optimo. 
+Con respecto a los tipos de cruce, el mejor es el que se hace por columna, debido a que da resultados mas constantes, ademas que en el caso del tablero mas pequeño, se visualizo que con el cruce por columna el algoritmo fue capaz de encontrar el optimo. 
 
 # Manual de uso
 
