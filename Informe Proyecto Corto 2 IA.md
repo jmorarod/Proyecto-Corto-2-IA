@@ -216,11 +216,11 @@ A continuación se detallan los resultados obtenidos
 
 ### Conlusiones de los resultados
 
-Con el tablero mas grande los resultados no fueron demasiado favorables, esto se debe a la cantidad de generaciones con el que se hicieron pruebas. Conforme se hicieron las pruebas se noto que el valor del fitness de los individuos se mantenia constante y no cambiante, esto se debe a los valores que se utilizaron para la mutacion.
+Con el tablero mas grande los resultados no fueron demasiado favorables, esto se debe a la cantidad de generaciones con el que se hicieron pruebas. Conforme se hicieron las pruebas se noto que el valor del fitness de los individuos se mantenia constante y no cambiante, esto se debe a los valores que se utilizaron para la mutacion. El valor de mutacion que mejor funcionan con tableros grandes y pocas generaciones, es utilizar un valor grande para el valor de agregar una nueva señal. Lo anterior hace que se mejore el fitness sin embargo nunca se llego a encontrar el optimo, para encontrar el optimo es necesario que se evaluen mas generaciones. 
 
 Ademas se observo que el tablero mas pequeño si se logro encontrar el optimo (donde el fitness es 277). Sin embargo se noto que usualmente despues de cierta cantidad de generaciones la puntuacion del fitness comenzaba a bajar considerablemente. 
 
-Con respecto a los tipos de cruce, el mejor es el que se hace por columna debido a que da resultados mas constantes ademas que el caso del tablero mas pequeño se visualizo que con el cruce por columna fue el unico capaz de encontrar el optimo. 
+Con respecto a los tipos de cruce, el mejor es el que se hace por columna, debido a que da resultados mas constantes, ademas que en el caso del tablero mas pequeño, se visualizo que con el cruce por columna el algoritmo fue capaz de encontrar el optimo. 
 
 # Manual de uso
 
@@ -231,4 +231,6 @@ Con respecto a los tipos de cruce, el mejor es el que se hace por columna debido
 * Para ejecutar el algoritmos genético, se utilizará este comando como ejemplo (se pueden cambiar los valores de los parámetros al gusto): python main.py --tablero-inicial ejemplo1.txt --genetico --derecha --individuos 5 --generaciones 3 --mutacion-agregar 40 --mutacion-cambiar 40 --mutacion-quitar 20 --tipo-cruce 1
  
 * Se debe tomar en cuenta que ejemplo1.txt es un archivo de entrada que se encontrará en la misma carpeta que el archivo main.py, de otra forma, el programa no reconocerá el archivo y no se ejecutará.
+
+* También se debe tomar en cuenta que el algoritmo genético tiene cuatro parámetros opcionales: --mutacion-agregar, --mutacion-cambiar --mutacion-quitar y --tipo-cruce, es decir, si no se ponen estos parámetros, el programa se ejecutará de igual forma. Los parámetros anteriores a estos son obligatorios. 
 
