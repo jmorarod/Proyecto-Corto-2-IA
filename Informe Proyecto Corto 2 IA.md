@@ -1,4 +1,4 @@
-# Informe de proyecto corto #2-3 - Inteligencia Artificial: Buscador de Zanahorias
+﻿# Informe de proyecto corto #2-3 - Inteligencia Artificial: Buscador de Zanahorias
 #### Realizado Por:
 1. José Miguel Mora Rodríguez
 2. Dylan Rodríguez Barboza
@@ -222,5 +222,13 @@ Ademas se observo que el tablero mas pequeño si se logro encontrar el optimo (d
 
 Con respecto a los tipos de cruce, el mejor es el que se hace por columna debido a que da resultados mas constantes ademas que el caso del tablero mas pequeño se visualizo que con el cruce por columna fue el unico capaz de encontrar el optimo. 
 
+# Manual de uso
 
+* Se debe abrir la línea de comandos en el mismo directorio en el que se encuentre el archivo main.py
+ 
+* Para ejecutar el algoritmos de A*, se utilizará este comando como ejemplo (se pueden cambiar los valores de los parámetros al gusto): python main.py --tablero-inicial ejemplo1.txt --a-estrella --vision 2 --zanahorias 2
+ 
+* Para ejecutar el algoritmos genético, se utilizará este comando como ejemplo (se pueden cambiar los valores de los parámetros al gusto): python main.py --tablero-inicial ejemplo1.txt --genetico --derecha --individuos 5 --generaciones 3 --mutacion-agregar 40 --mutacion-cambiar 40 --mutacion-quitar 20 --tipo-cruce 1
+ 
+* Se debe tomar en cuenta que ejemplo1.txt es un archivo de entrada que se encontrará en la misma carpeta que el archivo main.py, de otra forma, el programa no reconocerá el archivo y no se ejecutará.
 
