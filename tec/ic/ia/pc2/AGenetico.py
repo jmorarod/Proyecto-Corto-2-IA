@@ -21,8 +21,15 @@ mejor = []
 #              comer todas las zanahorias
 
 
-def algortimo_genetico(tablero_inicial, direccion, cant_individuos, generaciones,
-                       magregar, mcambiar, mquitar, tipo_cruce):
+def algortimo_genetico(
+        tablero_inicial,
+        direccion,
+        cant_individuos,
+        generaciones,
+        magregar,
+        mcambiar,
+        mquitar,
+        tipo_cruce):
 
     mutacion_agregar_signal = magregar
     mutacion_cambiar_direccion = mcambiar
@@ -44,9 +51,9 @@ def algortimo_genetico(tablero_inicial, direccion, cant_individuos, generaciones
     cant = 1
 
     try:
-        ruta = "salida_genetico/"+direccion
+        ruta = "salida_genetico/" + direccion
         shutil.rmtree(ruta)
-    except:
+    except BaseException:
         pass
 
     global mejor
@@ -54,10 +61,13 @@ def algortimo_genetico(tablero_inicial, direccion, cant_individuos, generaciones
 
     while(cant <= generaciones):
         print("\n")
-        print("GENERACION: "+str(cant).zfill(5))
+        print("GENERACION: " + str(cant).zfill(5))
         for i in individuos:
-            i_aux = mutacion(i, mutacion_agregar_signal, mutacion_cambiar_direccion,
-                             mutacion_quitar_signal)
+            i_aux = mutacion(
+                i,
+                mutacion_agregar_signal,
+                mutacion_cambiar_direccion,
+                mutacion_quitar_signal)
 
         n = len(individuos)
 
@@ -66,8 +76,8 @@ def algortimo_genetico(tablero_inicial, direccion, cant_individuos, generaciones
         while(n > 0):
             random.seed(time.clock())
 
-            i1 = random.randint(0, len(individuos)-1)
-            i2 = random.randint(0, len(individuos)-1)
+            i1 = random.randint(0, len(individuos) - 1)
+            i2 = random.randint(0, len(individuos) - 1)
 
             hijos = cruce(individuos[i1], individuos[i2], tipo_cruce)
 
@@ -133,10 +143,10 @@ def elegir_mejores(gen, cantidad, direccion, generacion):
 def cruce(individuo1, individuo2, tipo):
     if tipo == 0:
         n = len(individuo1)
-        h1 = individuo1[:n//2]
-        h1.extend(individuo2[n//2:])
-        h2 = individuo2[:n//2]
-        h2.extend(individuo1[n//2:])
+        h1 = individuo1[:n // 2]
+        h1.extend(individuo2[n // 2:])
+        h2 = individuo2[:n // 2]
+        h2.extend(individuo1[n // 2:])
 
         h = []
         h.append(h1)
@@ -148,11 +158,11 @@ def cruce(individuo1, individuo2, tipo):
         h1 = copy.deepcopy(individuo1)
         h2 = copy.deepcopy(individuo2)
         for i in range(0, len(individuo1)):
-            h = individuo1[i][:n//2]
-            h.extend(individuo2[i][n//2:])
+            h = individuo1[i][:n // 2]
+            h.extend(individuo2[i][n // 2:])
             h1[i] = copy.deepcopy(h)
-            h = individuo2[i][:n//2]
-            h.extend(individuo1[i][n//2:])
+            h = individuo2[i][:n // 2]
+            h.extend(individuo1[i][n // 2:])
             h2[i] = copy.deepcopy(h)
 
         h = []
@@ -183,8 +193,8 @@ def mutacion(individuo, m_agregar, m_cambiar, m_quitar):
         n = 0
         dimension = len(individuo) * len(individuo[0])
         while(add and n < dimension):
-            i = random.randint(0, len(individuo)-1)
-            j = random.randint(0, len(individuo[0])-1)
+            i = random.randint(0, len(individuo) - 1)
+            j = random.randint(0, len(individuo[0]) - 1)
             x = random.randint(0, 3)
 
             if individuo[i][j] == ' ':
@@ -201,7 +211,7 @@ def mutacion(individuo, m_agregar, m_cambiar, m_quitar):
                     signals_position.append([i, j])
 
         if(len(signals_position) > 0):
-            x = random.randint(0, len(signals_position)-1)
+            x = random.randint(0, len(signals_position) - 1)
             pos = signals_position[x]
             x = random.randint(0, 3)
             individuo[pos[0]][pos[1]] = signals[x]
@@ -215,7 +225,7 @@ def mutacion(individuo, m_agregar, m_cambiar, m_quitar):
                     signals_position.append([i, j])
 
         if(len(signals_position) > 0):
-            x = random.randint(0, len(signals_position)-1)
+            x = random.randint(0, len(signals_position) - 1)
             pos = signals_position[x]
             individuo[pos[0]][pos[1]] = " "
 
@@ -263,8 +273,8 @@ def fitness(individuo, direccion):
     cant_zanahorias = resultado[1]
     zanahorias_faltantes = total_zanahorias - cant_zanahorias
 
-    fitness = C1*cant_zanahorias - \
-        (C2*cant_signals+C3*cant_pasos+C4*zanahorias_faltantes)
+    fitness = C1 * cant_zanahorias - \
+        (C2 * cant_signals + C3 * cant_pasos + C4 * zanahorias_faltantes)
 
     return fitness
 
@@ -304,14 +314,18 @@ def recorrer_tablero(individuo, pos_conejo, direccion, total_zanahoria, num):
             elif (individuo[i][j] == 'A' or individuo[i][j] == 'V'):
                 zanahorias = total_zanahoria - cant_zanahorias
                 resultado = recorrer_tablero(
-                    individuo, [i, j], individuo[i][j], zanahorias, num+1)
-                return [resultado[0]+cant_pasos, resultado[1]+cant_zanahorias]
+                    individuo, [i, j], individuo[i][j], zanahorias, num + 1)
+                return [
+                    resultado[0] +
+                    cant_pasos,
+                    resultado[1] +
+                    cant_zanahorias]
 
     elif direccion == 'izquierda' or direccion == '<':
         len_individuo = len(individuo[0])
         i = pos_conejo[0]
-        for x in range(pos_conejo[1], len_individuo+1):
-            j = len_individuo-x
+        for x in range(pos_conejo[1], len_individuo + 1):
+            j = len_individuo - x
             if j >= len_individuo:
                 break
             elif j == pos_conejo[1]:
@@ -326,15 +340,19 @@ def recorrer_tablero(individuo, pos_conejo, direccion, total_zanahoria, num):
             elif (individuo[i][j] == 'A' or individuo[i][j] == 'V'):
                 zanahorias = total_zanahoria - cant_zanahorias
                 resultado = recorrer_tablero(
-                    individuo, [i, j], individuo[i][j], zanahorias, num+1)
-                return [resultado[0]+cant_pasos, resultado[1]+cant_zanahorias]
+                    individuo, [i, j], individuo[i][j], zanahorias, num + 1)
+                return [
+                    resultado[0] +
+                    cant_pasos,
+                    resultado[1] +
+                    cant_zanahorias]
 
     elif direccion == 'arriba' or direccion == 'A':
         j = pos_conejo[1]
         len_individuo = len(individuo)
 
-        for x in range(pos_conejo[0], len_individuo+1):
-            i = len_individuo-x
+        for x in range(pos_conejo[0], len_individuo + 1):
+            i = len_individuo - x
             if i >= len_individuo:
                 break
             elif i == pos_conejo[0]:
@@ -349,8 +367,12 @@ def recorrer_tablero(individuo, pos_conejo, direccion, total_zanahoria, num):
             elif (individuo[i][j] == '<' or individuo[i][j] == '>'):
                 zanahorias = total_zanahoria - cant_zanahorias
                 resultado = recorrer_tablero(
-                    individuo, [i, j], individuo[i][j], zanahorias, num+1)
-                return [resultado[0]+cant_pasos, resultado[1]+cant_zanahorias]
+                    individuo, [i, j], individuo[i][j], zanahorias, num + 1)
+                return [
+                    resultado[0] +
+                    cant_pasos,
+                    resultado[1] +
+                    cant_zanahorias]
 
     elif direccion == 'abajo' or direccion == 'V':
         j = pos_conejo[1]
@@ -370,8 +392,12 @@ def recorrer_tablero(individuo, pos_conejo, direccion, total_zanahoria, num):
             elif (individuo[i][j] == '<' or individuo[i][j] == '>'):
                 zanahorias = total_zanahoria - cant_zanahorias
                 resultado = recorrer_tablero(
-                    individuo, [i, j], individuo[i][j], zanahorias, num+1)
-                return [resultado[0]+cant_pasos, resultado[1]+cant_zanahorias]
+                    individuo, [i, j], individuo[i][j], zanahorias, num + 1)
+                return [
+                    resultado[0] +
+                    cant_pasos,
+                    resultado[1] +
+                    cant_zanahorias]
 
     return [cant_pasos, cant_zanahorias]
 
@@ -399,7 +425,7 @@ def leer_tablero(archivo):
             i += 1
         archivo.close()
         return tablero
-    except:
+    except BaseException:
         return []
 
 # Entrada: Direccion de un archivo
@@ -451,10 +477,10 @@ def validar_caracter(char):
 
 
 def print_tablero_genetico(direccion, generacion, indiviuos):
-    ruta = "salida_genetico/"+direccion+"/"+str(generacion).zfill(5)
+    ruta = "salida_genetico/" + direccion + "/" + str(generacion).zfill(5)
     try:
         os.makedirs(ruta)
-    except:
+    except BaseException:
         pass
 
     try:
@@ -470,5 +496,5 @@ def print_tablero_genetico(direccion, generacion, indiviuos):
             file.write(string)
             file.close()
             n += 1
-    except:
+    except BaseException:
         pass

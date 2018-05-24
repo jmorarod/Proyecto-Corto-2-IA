@@ -9,13 +9,13 @@ from random import uniform
 mejor = []
 
 
-#Entrada: Archivo con el tablero inicial, rango de vision
+# Entrada: Archivo con el tablero inicial, rango de vision
 #         zanahorias que el conejo va a buscar
-#Salida: Imprime cada paso del algoritmo en un archivo txt
-#Restricciones: Revisar restriciones de formato del tablero
+# Salida: Imprime cada paso del algoritmo en un archivo txt
+# Restricciones: Revisar restriciones de formato del tablero
 #               en la documentación, el rango y las zanahorias
 #               son números enteros
-#Descripción: Dado un escenario del problema del conejo
+# Descripción: Dado un escenario del problema del conejo
 #             realiza una búsqueda a* para cada una de
 #             las zanahorias hasta que no las haya en el
 #             tablero o bien haya encontrado la cantidad
@@ -27,33 +27,45 @@ def a_star_search(archivo, vision, zanahorias):
         return
     i = 1
     while(zanahorias > 0 and zanahorias_restantes(tablero) > 0):
-        print_tablero(tablero,"salida_A_Estrella\\" + str(i).zfill(5) + ".txt")
+        print_tablero(
+            tablero,
+            "salida_A_Estrella\\" +
+            str(i).zfill(5) +
+            ".txt")
         costos = calculo_costo(tablero, vision, zanahorias)
         movimiento = menor_costo(costos)
         print_paso(i, costos, movimiento, False)
         tablero, zanahorias = mover_conejo(movimiento, tablero, zanahorias)
         i += 1
-    print("Paso: ",str(i).zfill(5), "FINAL")
+    print("Paso: ", str(i).zfill(5), "FINAL")
     print_tablero(tablero, "salida_A_Estrella\\" + str(i).zfill(5) + ".txt")
+
 
 def print_paso(paso, costos, movimiento, final):
     paso = str(paso)
     if(not final):
-        print("Paso: ",paso.zfill(5),obtener_costos_string(costos), "Movimiento: ", movimiento[0])
+        print(
+            "Paso: ",
+            paso.zfill(5),
+            obtener_costos_string(costos),
+            "Movimiento: ",
+            movimiento[0])
     else:
-        print("Paso: ",paso.zfill(5), "FINAL")
-        
+        print("Paso: ", paso.zfill(5), "FINAL")
+
+
 def obtener_costos_string(costos):
     string = ""
     for costo in costos:
-        string += costo[0] +": "+str(costo[1])+" "
+        string += costo[0] + ": " + str(costo[1]) + " "
     return string
 
-#Entrada: Matriz y string
-#Salida: 
-#Restricciones: 
-#Descripción: Escribe en un txt la matriz "tablero"
-    
+# Entrada: Matriz y string
+# Salida:
+# Restricciones:
+# Descripción: Escribe en un txt la matriz "tablero"
+
+
 def zanahorias_restantes(tablero):
     cantidad = 0
     for i in tablero:
@@ -62,34 +74,36 @@ def zanahorias_restantes(tablero):
                 cantidad += 1
     return cantidad
 
-#Entrada: Matriz y string
-#Salida: 
-#Restricciones: 
-#Descripción: Escribe en un txt la matriz "tablero"
-    
+# Entrada: Matriz y string
+# Salida:
+# Restricciones:
+# Descripción: Escribe en un txt la matriz "tablero"
+
+
 def print_tablero(tablero, nombre_archivo):
     try:
         string = ""
-        file = open(nombre_archivo,'w+')
+        file = open(nombre_archivo, 'w+')
         for i in tablero:
             for j in i:
                 string += j
         file.write(string)
         file.close()
-    except:
+    except BaseException:
         pass
 
-#Entrada: Tablero del problema del conejo(Matriz NxM),
+# Entrada: Tablero del problema del conejo(Matriz NxM),
 #         Rango de visión del conejo(entero),
 #         Cantidad de zanahorias restantes
-#Salida: Costos por cada posible movimiento, ejemplo:
+# Salida: Costos por cada posible movimiento, ejemplo:
 #       [["DERECHA",10], ["IZQUIERDA",1000]]
-#Restricciones: Revisar restriciones de formato del tablero
+# Restricciones: Revisar restriciones de formato del tablero
 #               en la documentación, rango y zanahorias_restantes
 #               son enteros
-#Descripción: Cálcula el costo de cada movimiento dado por la función
+# Descripción: Cálcula el costo de cada movimiento dado por la función
 #             de predicción de costo futuro:
 #             ********FUNCION DE COSTO************
+
 
 def calculo_costo(tablero, rango, zanahorias_restantes):
     conejo = posicion_conejo(tablero)
@@ -102,8 +116,11 @@ def calculo_costo(tablero, rango, zanahorias_restantes):
             casilla = tablero[casilla_vision[0]][casilla_vision[1]]
             #Función de costo###
             if(casilla == 'Z'):
-                costo = abs(casilla_movimiento[1] - casilla_vision[0]) + abs(casilla_movimiento[2] - casilla_vision[1])
-                costo -= (zanahorias_restantes - cantidad_caracter_vecinos_por_casilla('Z', casilla_vision, tablero))
+                costo = abs(
+                    casilla_movimiento[1] - casilla_vision[0]) + abs(
+                    casilla_movimiento[2] - casilla_vision[1])
+                costo -= (zanahorias_restantes -
+                          cantidad_caracter_vecinos_por_casilla('Z', casilla_vision, tablero))
                 if(tablero[casilla_movimiento[1]][casilla_movimiento[2]] == 'Z'):
                     costo -= 1
             ####################
@@ -117,19 +134,21 @@ def calculo_costo(tablero, rango, zanahorias_restantes):
                 indice_minimo = indice
             indice += 1
         try:
-            costos += [[casilla_movimiento[0], costos_movimientos[indice_minimo]]]
-        except:
-            costos += [[casilla_movimiento[0], 1000]]           
+            costos += [[casilla_movimiento[0],
+                        costos_movimientos[indice_minimo]]]
+        except BaseException:
+            costos += [[casilla_movimiento[0], 1000]]
     return costos
 
-#Entrada: Movimiento a realizar(["Direccion",x, y]),
+# Entrada: Movimiento a realizar(["Direccion",x, y]),
 #         Tablero del problema del conejo(Matriz NxM),
 #         Cantidad de zanahorias restantes
-#Salida: Matriz con el tablero actual luego del movimiento,
+# Salida: Matriz con el tablero actual luego del movimiento,
 #        Cantidad de zanahorias restantes
-#Restricciones: Revisar restriciones de formato del tablero
+# Restricciones: Revisar restriciones de formato del tablero
 #               en la documentación
-#Descripción: Realiza el movimiento del conejo en el tablero 
+# Descripción: Realiza el movimiento del conejo en el tablero
+
 
 def mover_conejo(movimiento, tablero, zanahorias):
     conejo = posicion_conejo(tablero)
@@ -153,13 +172,13 @@ def mover_conejo(movimiento, tablero, zanahorias):
             zanahorias -= 1
         tablero[x_conejo + 1][y_conejo] = 'C'
     return tablero, zanahorias
-        
-                
+
+
 #Entrada: Lista
 #Salida: Entero
-#Restricciones: La lista tiene el formato
+# Restricciones: La lista tiene el formato
 #               [["Direccion",costo], ["Direccion",costo]...]
-#Descripción: La dirección con menor costo
+# Descripción: La dirección con menor costo
 
 def menor_costo(costos):
     menor = float("inf")
@@ -175,68 +194,71 @@ def menor_costo(costos):
     if(lista_min_costos == []):
         return min_costo
     else:
-        
+
         lista_min_costos += [min_costo]
         return direccion_aleatoria(lista_min_costos)
+
 
 def direccion_aleatoria(lista_min_costo):
     direcciones = len(lista_min_costo)
     probabilidad = 1 / direcciones
-    probabilidades = probabilidades_acumuladas(probabilidad, len(lista_min_costo))
+    probabilidades = probabilidades_acumuladas(
+        probabilidad, len(lista_min_costo))
     sample_num = uniform(0, 1)
     for i in range(0, len(probabilidades)):
         if (sample_num <= probabilidades[i]):
             return lista_min_costo[i]
-    
+
 
 def probabilidades_acumuladas(probabilidad, cantidad):
     probabilidades = []
     for i in range(0, cantidad):
         probabilidades += [probabilidad * (i + 1)]
     return probabilidades
-                
-#Entrada: Tablero del problema del conejo(Matriz NxM),
+
+# Entrada: Tablero del problema del conejo(Matriz NxM),
 #         Posición [x, y] del conejo
-#Salida: Matriz con los posibles movimientos del conejo
+# Salida: Matriz con los posibles movimientos del conejo
 #        Cada movimiento es ["Direccion",x, y]
-#Restricciones: Revisar restriciones de formato del tablero
+# Restricciones: Revisar restriciones de formato del tablero
 #               en la documentación
-#Descripción: Retorna una matriz con las direcciones
+# Descripción: Retorna una matriz con las direcciones
 #             en las que se puede mover el conejo
 #             dada su posición actual
+
 
 def movimientos_conejo(tablero, conejo):
     movimientos = []
     if(conejo[1] - 1 >= 0):
-        movimientos += [["IZQUIERDA",conejo[0], conejo[1] - 1]]
+        movimientos += [["IZQUIERDA", conejo[0], conejo[1] - 1]]
     if(conejo[1] + 1 < len(tablero[0]) - 1):
-        movimientos += [["DERECHA",conejo[0], conejo[1] + 1]]
+        movimientos += [["DERECHA", conejo[0], conejo[1] + 1]]
     if(conejo[0] - 1 >= 0):
-        movimientos += [["ARRIBA",conejo[0] - 1, conejo[1]]]
+        movimientos += [["ARRIBA", conejo[0] - 1, conejo[1]]]
     if(conejo[0] + 1 < len(tablero)):
-        movimientos += [["ABAJO",conejo[0] + 1, conejo[1]]]
+        movimientos += [["ABAJO", conejo[0] + 1, conejo[1]]]
     return movimientos
-    
-            
-                
-#Entrada: Tablero del problema del conejo(Matriz NxM)
-#Salida: Posicion del conejo en el tablero
-#Restricciones: Revisar restriciones de formato del tablero
+
+
+# Entrada: Tablero del problema del conejo(Matriz NxM)
+# Salida: Posicion del conejo en el tablero
+# Restricciones: Revisar restriciones de formato del tablero
 #               en la documentación
-#Descripción: Retorna la posición del conejo en el tablero
+# Descripción: Retorna la posición del conejo en el tablero
 
 def posicion_conejo(tablero):
     for i in range(0, len(tablero)):
         for j in range(0, len(tablero[0])):
             if(tablero[i][j] == 'C'):
                 return [i, j]
-            
-#Entradas: Posicion del conejo(Lista = [x, y])
-#          Rango de vision(Lista = [x, y]) 
-#Salida: Vision del conejo(Matriz [[x1,y1]...[xn, yn]])
-#Restricciones:
-#Descripción: Retorna una matriz con las casillas visibles
+
+# Entradas: Posicion del conejo(Lista = [x, y])
+#          Rango de vision(Lista = [x, y])
+# Salida: Vision del conejo(Matriz [[x1,y1]...[xn, yn]])
+# Restricciones:
+# Descripción: Retorna una matriz con las casillas visibles
 #             por el conejo en el tablero
+
 
 def rango_vision_conejo(tablero, posicion, rango):
     vision = []
@@ -246,47 +268,50 @@ def rango_vision_conejo(tablero, posicion, rango):
         for j in range(y_conejo - rango, y_conejo + rango):
             if(i >= 0 and i < len(tablero) and j >= 0 and j < len(tablero[0]) - 1):
                 if(i != x_conejo or j != y_conejo):
-                    vision += [[i,j]]
+                    vision += [[i, j]]
 
     return vision
 
-#Entrada: Dos listas 
-#Salida: Distancia euclideana entre casillas
+# Entrada: Dos listas
+# Salida: Distancia euclideana entre casillas
 #Restricciones: Lista = [x, y]
-#Descripción: Retorna la distancia entre dos casillas
+# Descripción: Retorna la distancia entre dos casillas
+
 
 def distancia_entre_casillas(casilla_1, casilla_2):
     x1 = casilla_1[0]
     y1 = casilla_1[1]
     x2 = casilla_2[0]
-    y2= casilla_2[1]
+    y2 = casilla_2[1]
     return math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2)
 
-#Entradas: Un caracter, lista, matriz
+# Entradas: Un caracter, lista, matriz
 #Salida: Entero
-#Restricciones: Lista = [x, y], matriz NxM
-#Descripción: Dada una casilla retorna la cantidad de veces
+# Restricciones: Lista = [x, y], matriz NxM
+# Descripción: Dada una casilla retorna la cantidad de veces
 #             que se encuentra el caracter en las casillas vecinas
+
 
 def cantidad_caracter_vecinos_por_casilla(caracter, casilla, tablero):
     numero_caracteres = 0
-    for i in range(casilla[0] - 1, casilla[0]+ 1):
+    for i in range(casilla[0] - 1, casilla[0] + 1):
         for j in range(casilla[1] - 1, casilla[1] + 1):
             if(i >= 0 and i < len(tablero) and j >= 0 and j < len(tablero[0])):
                 if(tablero[i][j] == caracter):
                     numero_caracteres += 1
     return numero_caracteres
 
-#Entrada: Direccion de un archivo
-#Salida: Tablero del problema del conejo(Detalle en la documentación)
-#Restricciones: Revisar restriciones de formato en la documentación
-#Descripción: Lee un archivo de texto con el formato de tablero
+# Entrada: Direccion de un archivo
+# Salida: Tablero del problema del conejo(Detalle en la documentación)
+# Restricciones: Revisar restriciones de formato en la documentación
+# Descripción: Lee un archivo de texto con el formato de tablero
 #             y retorna una matriz con la estructura del problema
-            
+
+
 def leer_tablero(archivo):
     try:
         tablero = inicializar_tablero(archivo)
-        archivo = open(archivo,'r')
+        archivo = open(archivo, 'r')
         if(tablero == []):
             return []
         i = 0
@@ -300,35 +325,35 @@ def leer_tablero(archivo):
             i += 1
         archivo.close()
         return tablero
-    except:
+    except BaseException:
         return []
 
-#Entrada: Direccion de un archivo
-#Salida: Matriz de dimensiones N(filas del archivo) x
+# Entrada: Direccion de un archivo
+# Salida: Matriz de dimensiones N(filas del archivo) x
 #        M(Caracteres x fila)
-#Restricciones: Revisar restriciones de formato del problema
+# Restricciones: Revisar restriciones de formato del problema
 #               en la documentación
-#Descripción: Lee un archivo de texto con el formato de tablero
+# Descripción: Lee un archivo de texto con el formato de tablero
 #             y retorna una matriz N x M
 
+
 def inicializar_tablero(archivo):
-    archivo = open(archivo,'r')
+    archivo = open(archivo, 'r')
     filas = 0
     columnas = 0
     for line in archivo:
         filas += 1
         columnas = 0
         for char in line:
-                columnas += 1        
+            columnas += 1
     tablero = [[0 for i in range(columnas)] for j in range(filas)]
     return tablero
-    
 
-            
+
 #Entrada: Caracter
-#Salida: True o False
-#Restricciones: 
-#Descripción: Valida si un caracter es valido en la definición
+# Salida: True o False
+# Restricciones:
+# Descripción: Valida si un caracter es valido en la definición
 #             del problema(revisar documentación)
 
 def validar_caracter(char):
@@ -342,8 +367,6 @@ def validar_caracter(char):
         return True
     else:
         return False
-
-
 
 
 # Entrada: tablero inicial direccion en la cual se encuentra un archivo .txt
@@ -361,8 +384,15 @@ def validar_caracter(char):
 #              comer todas las zanahorias
 
 
-def algortimo_genetico(tablero_inicial, direccion, cant_individuos, generaciones,
-                       magregar, mcambiar, mquitar, tipo_cruce):
+def algortimo_genetico(
+        tablero_inicial,
+        direccion,
+        cant_individuos,
+        generaciones,
+        magregar,
+        mcambiar,
+        mquitar,
+        tipo_cruce):
 
     mutacion_agregar_signal = magregar
     mutacion_cambiar_direccion = mcambiar
@@ -384,9 +414,9 @@ def algortimo_genetico(tablero_inicial, direccion, cant_individuos, generaciones
     cant = 1
 
     try:
-        ruta = "salida_genetico/"+direccion
+        ruta = "salida_genetico/" + direccion
         shutil.rmtree(ruta)
-    except:
+    except BaseException:
         pass
 
     global mejor
@@ -394,10 +424,13 @@ def algortimo_genetico(tablero_inicial, direccion, cant_individuos, generaciones
 
     while(cant <= generaciones):
         print("\n")
-        print("GENERACION: "+str(cant).zfill(5))
+        print("GENERACION: " + str(cant).zfill(5))
         for i in individuos:
-            i_aux = mutacion(i, mutacion_agregar_signal, mutacion_cambiar_direccion,
-                             mutacion_quitar_signal)
+            i_aux = mutacion(
+                i,
+                mutacion_agregar_signal,
+                mutacion_cambiar_direccion,
+                mutacion_quitar_signal)
 
         n = len(individuos)
 
@@ -406,8 +439,8 @@ def algortimo_genetico(tablero_inicial, direccion, cant_individuos, generaciones
         while(n > 0):
             random.seed(time.clock())
 
-            i1 = random.randint(0, len(individuos)-1)
-            i2 = random.randint(0, len(individuos)-1)
+            i1 = random.randint(0, len(individuos) - 1)
+            i2 = random.randint(0, len(individuos) - 1)
 
             hijos = cruce(individuos[i1], individuos[i2], tipo_cruce)
 
@@ -473,10 +506,10 @@ def elegir_mejores(gen, cantidad, direccion, generacion):
 def cruce(individuo1, individuo2, tipo):
     if tipo == 0:
         n = len(individuo1)
-        h1 = individuo1[:n//2]
-        h1.extend(individuo2[n//2:])
-        h2 = individuo2[:n//2]
-        h2.extend(individuo1[n//2:])
+        h1 = individuo1[:n // 2]
+        h1.extend(individuo2[n // 2:])
+        h2 = individuo2[:n // 2]
+        h2.extend(individuo1[n // 2:])
 
         h = []
         h.append(h1)
@@ -488,11 +521,11 @@ def cruce(individuo1, individuo2, tipo):
         h1 = copy.deepcopy(individuo1)
         h2 = copy.deepcopy(individuo2)
         for i in range(0, len(individuo1)):
-            h = individuo1[i][:n//2]
-            h.extend(individuo2[i][n//2:])
+            h = individuo1[i][:n // 2]
+            h.extend(individuo2[i][n // 2:])
             h1[i] = copy.deepcopy(h)
-            h = individuo2[i][:n//2]
-            h.extend(individuo1[i][n//2:])
+            h = individuo2[i][:n // 2]
+            h.extend(individuo1[i][n // 2:])
             h2[i] = copy.deepcopy(h)
 
         h = []
@@ -523,8 +556,8 @@ def mutacion(individuo, m_agregar, m_cambiar, m_quitar):
         n = 0
         dimension = len(individuo) * len(individuo[0])
         while(add and n < dimension):
-            i = random.randint(0, len(individuo)-1)
-            j = random.randint(0, len(individuo[0])-1)
+            i = random.randint(0, len(individuo) - 1)
+            j = random.randint(0, len(individuo[0]) - 1)
             x = random.randint(0, 3)
 
             if individuo[i][j] == ' ':
@@ -541,7 +574,7 @@ def mutacion(individuo, m_agregar, m_cambiar, m_quitar):
                     signals_position.append([i, j])
 
         if(len(signals_position) > 0):
-            x = random.randint(0, len(signals_position)-1)
+            x = random.randint(0, len(signals_position) - 1)
             pos = signals_position[x]
             x = random.randint(0, 3)
             individuo[pos[0]][pos[1]] = signals[x]
@@ -555,7 +588,7 @@ def mutacion(individuo, m_agregar, m_cambiar, m_quitar):
                     signals_position.append([i, j])
 
         if(len(signals_position) > 0):
-            x = random.randint(0, len(signals_position)-1)
+            x = random.randint(0, len(signals_position) - 1)
             pos = signals_position[x]
             individuo[pos[0]][pos[1]] = " "
 
@@ -603,8 +636,8 @@ def fitness(individuo, direccion):
     cant_zanahorias = resultado[1]
     zanahorias_faltantes = total_zanahorias - cant_zanahorias
 
-    fitness = C1*cant_zanahorias - \
-        (C2*cant_signals+C3*cant_pasos+C4*zanahorias_faltantes)
+    fitness = C1 * cant_zanahorias - \
+        (C2 * cant_signals + C3 * cant_pasos + C4 * zanahorias_faltantes)
 
     return fitness
 
@@ -644,14 +677,18 @@ def recorrer_tablero(individuo, pos_conejo, direccion, total_zanahoria, num):
             elif (individuo[i][j] == 'A' or individuo[i][j] == 'V'):
                 zanahorias = total_zanahoria - cant_zanahorias
                 resultado = recorrer_tablero(
-                    individuo, [i, j], individuo[i][j], zanahorias, num+1)
-                return [resultado[0]+cant_pasos, resultado[1]+cant_zanahorias]
+                    individuo, [i, j], individuo[i][j], zanahorias, num + 1)
+                return [
+                    resultado[0] +
+                    cant_pasos,
+                    resultado[1] +
+                    cant_zanahorias]
 
     elif direccion == 'izquierda' or direccion == '<':
         len_individuo = len(individuo[0])
         i = pos_conejo[0]
-        for x in range(pos_conejo[1], len_individuo+1):
-            j = len_individuo-x
+        for x in range(pos_conejo[1], len_individuo + 1):
+            j = len_individuo - x
             if j >= len_individuo:
                 break
             elif j == pos_conejo[1]:
@@ -666,15 +703,19 @@ def recorrer_tablero(individuo, pos_conejo, direccion, total_zanahoria, num):
             elif (individuo[i][j] == 'A' or individuo[i][j] == 'V'):
                 zanahorias = total_zanahoria - cant_zanahorias
                 resultado = recorrer_tablero(
-                    individuo, [i, j], individuo[i][j], zanahorias, num+1)
-                return [resultado[0]+cant_pasos, resultado[1]+cant_zanahorias]
+                    individuo, [i, j], individuo[i][j], zanahorias, num + 1)
+                return [
+                    resultado[0] +
+                    cant_pasos,
+                    resultado[1] +
+                    cant_zanahorias]
 
     elif direccion == 'arriba' or direccion == 'A':
         j = pos_conejo[1]
         len_individuo = len(individuo)
 
-        for x in range(pos_conejo[0], len_individuo+1):
-            i = len_individuo-x
+        for x in range(pos_conejo[0], len_individuo + 1):
+            i = len_individuo - x
             if i >= len_individuo:
                 break
             elif i == pos_conejo[0]:
@@ -689,8 +730,12 @@ def recorrer_tablero(individuo, pos_conejo, direccion, total_zanahoria, num):
             elif (individuo[i][j] == '<' or individuo[i][j] == '>'):
                 zanahorias = total_zanahoria - cant_zanahorias
                 resultado = recorrer_tablero(
-                    individuo, [i, j], individuo[i][j], zanahorias, num+1)
-                return [resultado[0]+cant_pasos, resultado[1]+cant_zanahorias]
+                    individuo, [i, j], individuo[i][j], zanahorias, num + 1)
+                return [
+                    resultado[0] +
+                    cant_pasos,
+                    resultado[1] +
+                    cant_zanahorias]
 
     elif direccion == 'abajo' or direccion == 'V':
         j = pos_conejo[1]
@@ -710,8 +755,12 @@ def recorrer_tablero(individuo, pos_conejo, direccion, total_zanahoria, num):
             elif (individuo[i][j] == '<' or individuo[i][j] == '>'):
                 zanahorias = total_zanahoria - cant_zanahorias
                 resultado = recorrer_tablero(
-                    individuo, [i, j], individuo[i][j], zanahorias, num+1)
-                return [resultado[0]+cant_pasos, resultado[1]+cant_zanahorias]
+                    individuo, [i, j], individuo[i][j], zanahorias, num + 1)
+                return [
+                    resultado[0] +
+                    cant_pasos,
+                    resultado[1] +
+                    cant_zanahorias]
 
     return [cant_pasos, cant_zanahorias]
 
@@ -739,7 +788,7 @@ def leer_tablero(archivo):
             i += 1
         archivo.close()
         return tablero
-    except:
+    except BaseException:
         return []
 
 # Entrada: Direccion de un archivo
@@ -791,10 +840,10 @@ def validar_caracter(char):
 
 
 def print_tablero_genetico(direccion, generacion, indiviuos):
-    ruta = "salida_genetico/"+direccion+"/"+str(generacion).zfill(5)
+    ruta = "salida_genetico/" + direccion + "/" + str(generacion).zfill(5)
     try:
         os.makedirs(ruta)
-    except:
+    except BaseException:
         pass
 
     try:
@@ -810,5 +859,5 @@ def print_tablero_genetico(direccion, generacion, indiviuos):
             file.write(string)
             file.close()
             n += 1
-    except:
+    except BaseException:
         pass
