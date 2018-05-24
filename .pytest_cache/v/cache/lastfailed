@@ -1,0 +1,4 @@
+{
+  "astar_test.py::test_on_non_list_arguments_direccion_aleatoria": true,
+  "astar_test.py::test_on_non_list_arguments_zanahorias_restantes": true
+}

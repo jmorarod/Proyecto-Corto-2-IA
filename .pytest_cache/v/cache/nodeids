@@ -1,0 +1,8 @@
+[
+  "test_genetico.py::test_recorrer_tablero",
+  "test_genetico.py::test_fitness",
+  "test_genetico.py::test_mutacion",
+  "test_genetico.py::test_cruce_fila",
+  "test_genetico.py::test_cruce_columna",
+  "test_genetico.py::test_elegir_mejores"
+]
