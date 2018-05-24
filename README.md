@@ -1,1 +1,0 @@
-# Proyecto-Corto-2-IA
